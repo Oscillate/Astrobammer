@@ -5,25 +5,45 @@ public class CircleBehaviour : MonoBehaviour {
 
 	private Rigidbody2D rb;
 	public Vector2 Speed;
-
+	public int maxSpeed;
+	public int brakeStrength;
 	// Use this for initialization
 	void Start () {
 		rb = this.GetComponent<Rigidbody2D>();
+		maxSpeed = 150;
+		brakeStrength = 5;
 	}
-	
+
 	// Update is called once per frame
 	void Update () {
-		if (Input.GetKey ("w")) {
-			rb.AddForce (Vector2.up * Speed.x);
+		float xDir = Input.GetAxis("Horizontal");
+		float yDir = Input.GetAxis("Vertical");
+
+		if (xDir < 0) {
+			if (rb.velocity.x > -maxSpeed) {
+				rb.AddForce (Vector2.right * xDir *Speed.x);
+			}
 		}
-		if (Input.GetKey ("s")) {
-			rb.AddForce (Vector2.up * -Speed.x);
+		else if (xDir > 0) {
+			if (rb.velocity.x < maxSpeed) {
+				rb.AddForce (Vector2.right * xDir * Speed.x);
+			}
 		}
-		if (Input.GetKey ("a")) {
-			rb.AddForce (Vector2.right * -Speed.y);
+
+		if (yDir < 0) {
+			if (rb.velocity.y > -maxSpeed) {
+				rb.AddForce (Vector2.up * yDir * Speed.y);
+			}
 		}
-		if (Input.GetKey ("d")) {
-			rb.AddForce (Vector2.right * Speed.y);
+		else if (yDir > 0) {
+			if (rb.velocity.y < maxSpeed){
+				rb.AddForce (Vector2.up * yDir * Speed.y);
+			}
+		}
+
+		if (Input.GetKey("x")) {
+			rb.AddForce (Vector2.up * -rb.velocity.y*brakeStrength);
+			rb.AddForce (Vector2.right * -rb.velocity.x*brakeStrength);
 		}
 
 		Vector3 mousePosReal = Input.mousePosition;
