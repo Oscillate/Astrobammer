@@ -17,8 +17,8 @@ public class CircleBehaviour : MonoBehaviour {
     public GameObject drill;
     private Object myDrill;
     private Object myBat;
-
-	// Use this for initialization
+    
+    // Use this for initialization
     void Start () {
         rb = this.GetComponent<Rigidbody2D>();
     }
@@ -52,7 +52,7 @@ public class CircleBehaviour : MonoBehaviour {
             }
         }
         else if (yDir > 0) {
-            if (rb.velocity.y < maxSpeed){
+            if (rb.velocity.y < maxSpeed) {
                 rb.AddForce(Vector2.up * yDir * speed);
             }
         }
@@ -68,13 +68,13 @@ public class CircleBehaviour : MonoBehaviour {
             ((GameObject)myBat).transform.SetParent(this.transform);
             batTimer = batCoolDown;
         }
-
+        
         if (GetButton("Fire2") && drillTimer == 0) {
             myDrill = Instantiate(drill, this.transform.position + this.transform.up * 10, rb.transform.rotation);
             ((GameObject)myDrill).transform.SetParent(this.transform);
             drillTimer = drillCoolDown;
         }
-
+        
         if (GetAxis("Fire3") > 0) {
             rb.AddForce (Vector2.up * -rb.velocity.y * brakeStrength);
             rb.AddForce (Vector2.right * -rb.velocity.x * brakeStrength);
