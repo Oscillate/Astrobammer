@@ -18,8 +18,7 @@ public class CircleBehaviour : MonoBehaviour {
     private Object myDrill;
     private Object myBat;
     public int impactToKill=100000;
-
-  // Use this for initialization
+		
     void Start () {
         rb = this.GetComponent<Rigidbody2D>();
     }
@@ -54,8 +53,7 @@ public class CircleBehaviour : MonoBehaviour {
             if (rb.velocity.x > -maxSpeed) {
                 rb.AddForce(Vector2.right * xDir * speed);
             }
-        }
-        else if (xDir > 0) {
+        } else if (xDir > 0) {
             if (rb.velocity.x < maxSpeed) {
                 rb.AddForce(Vector2.right * xDir * speed);
             }
@@ -78,21 +76,21 @@ public class CircleBehaviour : MonoBehaviour {
         if (drillTimer > 0) {
             drillTimer -= 1;
         }
-        if (GetButton("Fire1") && batTimer==0) {
+        if (GetAxis("Fire1") > 0 && batTimer == 0) {
             myBat = Instantiate(bat, this.transform.position + this.transform.up * 10, rb.transform.rotation);
             ((GameObject)myBat).transform.SetParent(this.transform);
             batTimer = batCoolDown;
         }
 
-        if (GetButton("Fire2") && drillTimer==0) {
+        if (GetButton("Fire2") && drillTimer == 0) {
             myDrill = Instantiate(drill, this.transform.position + this.transform.up * 10, rb.transform.rotation);
             ((GameObject)myDrill).transform.SetParent(this.transform);
             drillTimer = drillCoolDown;
         }
 
-        if (GetButton("Fire3")) {
-            rb.AddForce (Vector2.up * -rb.velocity.y*brakeStrength);
-            rb.AddForce (Vector2.right * -rb.velocity.x*brakeStrength);
+        if (GetAxis("Fire3") > 0) {
+            rb.AddForce (Vector2.up * -rb.velocity.y * brakeStrength);
+            rb.AddForce (Vector2.right * -rb.velocity.x * brakeStrength);
         }
 
         float joyX = GetAxis("Look Horizontal");
