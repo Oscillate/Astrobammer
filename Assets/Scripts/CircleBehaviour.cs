@@ -17,6 +17,7 @@ public class CircleBehaviour : MonoBehaviour {
     public GameObject drill;
     private Object myDrill;
     private Object myBat;
+    private Quaternion rotation;
     public int impactToKill=100000;
 
     void Start () {
@@ -77,13 +78,13 @@ public class CircleBehaviour : MonoBehaviour {
             drillTimer -= 1;
         }
         if (GetAxis("Fire1") > 0 && batTimer == 0) {
-            myBat = Instantiate(bat, this.transform.position + this.transform.up * 10, rb.transform.rotation);
+            myBat = Instantiate(bat, this.transform.position + this.transform.up * 10, rotation);
             ((GameObject)myBat).transform.SetParent(this.transform);
             batTimer = batCoolDown;
         }
 
         if (GetButton("Fire2") && drillTimer == 0) {
-            myDrill = Instantiate(drill, this.transform.position + this.transform.up * 10, rb.transform.rotation);
+            myDrill = Instantiate(drill, this.transform.position + this.transform.up * 10, rotation);
             ((GameObject)myDrill).transform.SetParent(this.transform);
             drillTimer = drillCoolDown;
         }
@@ -97,14 +98,16 @@ public class CircleBehaviour : MonoBehaviour {
         float joyY = GetAxis("Look Vertical");
         if (joyX != 0 || joyY != 0) {
             float joyAngle = Mathf.Atan2(joyY, joyX) * -1 * 180 / Mathf.PI - 90;
-            rb.transform.rotation = Quaternion.AngleAxis(joyAngle, Vector3.forward);
+            rotation = Quaternion.AngleAxis(joyAngle, Vector3.forward);
         }
         if (playerNum == 1 && prevMouse != Input.mousePosition) {
             Vector3 mousePosReal = Input.mousePosition;
             mousePosReal.z = 100;
             Vector3 mousePos = Camera.main.ScreenToWorldPoint(mousePosReal);
-            rb.transform.rotation = Quaternion.LookRotation(Vector3.forward, mousePos - transform.position);
+            rotation = Quaternion.LookRotation(Vector3.forward, mousePos - transform.position);
         }
+        rb.transform.rotation = rotation;
+
         prevMouse = Input.mousePosition;
     }
 }
