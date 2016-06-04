@@ -18,7 +18,7 @@ public class CircleBehaviour : MonoBehaviour {
     private Object myDrill;
     private Object myBat;
     public int impactToKill=100000;
-		
+
     void Start () {
         rb = this.GetComponent<Rigidbody2D>();
     }
@@ -101,7 +101,7 @@ public class CircleBehaviour : MonoBehaviour {
         }
         if (playerNum == 1 && prevMouse != Input.mousePosition) {
             Vector3 mousePosReal = Input.mousePosition;
-            mousePosReal.z = 147;
+            mousePosReal.z = 100;
             Vector3 mousePos = Camera.main.ScreenToWorldPoint(mousePosReal);
             rb.transform.rotation = Quaternion.LookRotation(Vector3.forward, mousePos - transform.position);
         }
