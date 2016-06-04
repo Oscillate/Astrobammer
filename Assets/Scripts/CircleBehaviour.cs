@@ -7,11 +7,16 @@ public class CircleBehaviour : MonoBehaviour {
 	public Vector2 Speed;
 	public int maxSpeed;
 	public int brakeStrength;
+	public int batCoolDown;
+	private int batTimer;
+	private bool drillOn;
+	public GameObject bat;
+	public GameObject drill;
+	private Object myDrill;
 	// Use this for initialization
 	void Start () {
 		rb = this.GetComponent<Rigidbody2D>();
-		maxSpeed = 150;
-		brakeStrength = 5;
+		drillOn = false;
 	}
 
 	// Update is called once per frame
@@ -41,14 +46,33 @@ public class CircleBehaviour : MonoBehaviour {
 			}
 		}
 
+		Vector3 mousePosReal = Input.mousePosition;
+		mousePosReal.z = 147.2f;
+		Vector3 mousePos = Camera.main.ScreenToWorldPoint(mousePosReal);
+		rb.transform.rotation = Quaternion.LookRotation(Vector3.forward, mousePos - transform.position);
+		if (batTimer > 0) {
+			batTimer -= 1;
+		}
+		if (Input.GetButton("Fire1") && batTimer==0) {
+			Instantiate(bat, this.transform.position + this.transform.up * 10, rb.transform.rotation);
+			batTimer = batCoolDown;
+		}
+
+		if (Input.GetButton("Fire2") && !drillOn) {
+			myDrill = Instantiate(drill, this.transform.position + this.transform.up * 10, rb.transform.rotation);
+			((GameObject)myDrill).transform.SetParent(this.transform);
+			drillOn = true;
+		}
+		if (drillOn && !Input.GetButton("Fire2")) {
+			drillOn = false;
+			Destroy(myDrill);
+		}
+
 		if (Input.GetKey("x")) {
 			rb.AddForce (Vector2.up * -rb.velocity.y*brakeStrength);
 			rb.AddForce (Vector2.right * -rb.velocity.x*brakeStrength);
 		}
 
-		Vector3 mousePosReal = Input.mousePosition;
-		mousePosReal.z = 10;
-		Vector3 mousePos = Camera.main.ScreenToWorldPoint(mousePosReal);
-		rb.transform.rotation = Quaternion.LookRotation(Vector3.forward, mousePos - transform.position);
+
 	}
 }
