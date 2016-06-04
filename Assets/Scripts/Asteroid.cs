@@ -34,12 +34,13 @@ public class Asteroid : MonoBehaviour {
 			this.size -= 1;
 			float angle = 2 * Mathf.PI / numChildsSpawnedOnBreak;
 			this.transform.localScale /= Mathf.Sqrt(numChildsSpawnedOnBreak);
-			
+
 			float distance = Mathf.Sqrt(Mathf.Pow(this.GetComponent<SpriteRenderer> ().bounds.extents.x,2) * 2);
 			for (int i = 1;i<=numChildsSpawnedOnBreak;i++){
 				Vector3 newpos = new Vector3(this.transform.position.x + Mathf.Cos(i * angle) * distance, this.transform.position.y + Mathf.Sin(i * angle) * distance, 0);
 				GameObject newthing = Instantiate(this.gameObject, newpos, Quaternion.AngleAxis (angle * (i) / Mathf.PI * 180 - 90, this.transform.forward)) as GameObject;
 				newthing.GetComponent<Rigidbody2D>().velocity = Quaternion.AngleAxis(angle * (i) / Mathf.PI * 180 - 90, Vector3.forward) * rb.velocity;
+				newthing.GetComponent<Rigidbody2D>().mass = this.rb.mass/numChildsSpawnedOnBreak;
 
 			}
 		}
