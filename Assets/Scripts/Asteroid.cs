@@ -9,7 +9,11 @@ public class Asteroid : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		
+		AsteroidManager.Asteroids.Add (this);
+	}
+
+	void OnDestroy(){
+		AsteroidManager.Asteroids.Remove (this);
 	}
 	
 	// Update is called once per frame
