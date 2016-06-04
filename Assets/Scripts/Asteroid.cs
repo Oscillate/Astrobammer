@@ -9,15 +9,12 @@ public class Asteroid : MonoBehaviour {
 	private Rigidbody2D rb;
 	// Use this for initialization
 	void Start () {
-<<<<<<< HEAD
 		AsteroidManager.Asteroids.Add (this);
+		rb = this.GetComponent<Rigidbody2D>();
 	}
 
 	void OnDestroy(){
 		AsteroidManager.Asteroids.Remove (this);
-=======
-		rb = this.GetComponent<Rigidbody2D>();
->>>>>>> refs/remotes/origin/PlayerMovement
 	}
 
 	// Update is called once per frame
