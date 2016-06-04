@@ -1,11 +1,12 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class BatHitBoxBehavior : MonoBehaviour {
+public class DrillHitBoxBehavior : MonoBehaviour {
 	public int activeFrames;
 	// Use this for initialization
 	void Start () {
 		activeFrames = 5;
+
 	}
 
 	void OnTriggerEnter2D(Collider2D c){

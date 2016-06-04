@@ -8,16 +8,22 @@ public class CircleBehaviour : MonoBehaviour {
 	public int maxSpeed;
 	public int brakeStrength;
 	public int batCoolDown;
+	public int drillCoolDown;
 	private int batTimer;
-	private bool drillOn;
+	private int drillTimer;
 	public GameObject bat;
 	public GameObject drill;
 	private Object myDrill;
+	private Object myBat;
+
 	// Use this for initialization
 	void Start () {
 		rb = this.GetComponent<Rigidbody2D>();
-		drillOn = false;
+		drillCoolDown = 15;
+		batCoolDown = 15;
+		drillTimer = batTimer = 0;
 	}
+
 
 	// Update is called once per frame
 	void Update () {
@@ -53,20 +59,21 @@ public class CircleBehaviour : MonoBehaviour {
 		if (batTimer > 0) {
 			batTimer -= 1;
 		}
+		if (drillTimer > 0) {
+			drillTimer -= 1;
+		}
 		if (Input.GetButton("Fire1") && batTimer==0) {
-			Instantiate(bat, this.transform.position + this.transform.up * 10, rb.transform.rotation);
+			myBat = Instantiate(bat, this.transform.position + this.transform.up * 10, rb.transform.rotation);
+			((GameObject)myBat).transform.SetParent(this.transform);
 			batTimer = batCoolDown;
 		}
 
-		if (Input.GetButton("Fire2") && !drillOn) {
+		if (Input.GetButton("Fire2") && drillTimer==0) {
 			myDrill = Instantiate(drill, this.transform.position + this.transform.up * 10, rb.transform.rotation);
 			((GameObject)myDrill).transform.SetParent(this.transform);
-			drillOn = true;
+			drillTimer = drillCoolDown;
 		}
-		if (drillOn && !Input.GetButton("Fire2")) {
-			drillOn = false;
-			Destroy(myDrill);
-		}
+
 
 		if (Input.GetKey("x")) {
 			rb.AddForce (Vector2.up * -rb.velocity.y*brakeStrength);
