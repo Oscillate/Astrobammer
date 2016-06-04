@@ -73,6 +73,22 @@ public class CircleBehaviour : MonoBehaviour {
 			rb.AddForce (Vector2.right * -rb.velocity.x*brakeStrength);
 		}
 
+<<<<<<< HEAD
 
+=======
+        if (Input.GetJoystickNames().Length > 0) {
+            float joyX = Input.GetAxis("RightJoyHorizontal");
+            float joyY = Input.GetAxis("RightJoyVertical");
+            if (joyX != 0 || joyY != 0) {
+                float joyAngle = Mathf.Atan2(joyY, joyX) * -1 * 180 / Mathf.PI - 90;
+                rb.transform.rotation = Quaternion.AngleAxis(joyAngle, Vector3.forward);
+            }
+        } else {
+            Vector3 mousePosReal = Input.mousePosition;
+            mousePosReal.z = 10;
+            Vector3 mousePos = Camera.main.ScreenToWorldPoint(mousePosReal);
+            rb.transform.rotation = Quaternion.LookRotation(Vector3.forward, mousePos - transform.position);
+        }
+>>>>>>> refs/remotes/origin/khaslett/gamepad
 	}
 }
