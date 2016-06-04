@@ -16,8 +16,4 @@ public class BatHitBoxBehavior : MonoBehaviour {
 			Destroy(gameObject);
 		}
 	}
-
-	void OnCollisionEnter2D(Collision2D coll) {
-		coll.rigidbody.AddForce(this.transform.up * batStrength);
-	}
 }

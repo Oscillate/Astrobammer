@@ -6,37 +6,36 @@ public class Asteroid : MonoBehaviour {
 	public enum Size {small, medium, large};
 	public Size size;
 	public int numChildsSpawnedOnBreak;
-
+	private Rigidbody2D rb;
 	// Use this for initialization
 	void Start () {
+<<<<<<< HEAD
 		AsteroidManager.Asteroids.Add (this);
 	}
 
 	void OnDestroy(){
 		AsteroidManager.Asteroids.Remove (this);
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		if (Input.GetMouseButtonDown (0)) {
-			Batted (new GameObject());
-		}
-		if (Input.GetMouseButtonDown (1)) {
-			Breaked (new GameObject());
-		}
+=======
+		rb = this.GetComponent<Rigidbody2D>();
+>>>>>>> refs/remotes/origin/PlayerMovement
 	}
 
-	void OnCollisionEnter2D(Collision2D c){
-		if 	(c.collider.sharedMaterial.name.Equals("fast")){
+	// Update is called once per frame
+	void Update () {
+	}
+
+	void OnTriggerEnter2D(Collider2D c){
+		if 	(c.sharedMaterial.name.Equals("BatHitBox")){
 			Batted(c.gameObject);
 		}
-		if 	(c.collider.sharedMaterial.name.Equals("strong")){
+		if 	(c.sharedMaterial.name.Equals("DrillHitBox")){
 			Breaked(c.gameObject);
 		}
+
 	}
 
 	void Batted(GameObject batter){
-		this.GetComponent<Rigidbody2D> ().AddForce ( 5200 * batter.transform.up);
+		this.GetComponent<Rigidbody2D> ().AddForce ( 8000 * batter.transform.up);
 	}
 
 	void Breaked(GameObject breaker){
@@ -49,6 +48,8 @@ public class Asteroid : MonoBehaviour {
 			for (int i = 1;i<=numChildsSpawnedOnBreak;i++){
 				Vector3 newpos = new Vector3(this.transform.position.x + Mathf.Cos(i * angle) * distance, this.transform.position.y + Mathf.Sin(i * angle) * distance, 0);
 				GameObject newthing = Instantiate(this.gameObject, newpos, Quaternion.AngleAxis (angle * (i) / Mathf.PI * 180 - 90, this.transform.forward)) as GameObject;
+				newthing.GetComponent<Rigidbody2D>().velocity = Quaternion.AngleAxis(angle * (i) / Mathf.PI * 180 - 90, Vector3.forward) * rb.velocity;
+
 			}
 		}
 		Destroy (gameObject);
