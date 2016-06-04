@@ -17,6 +17,7 @@ public class CircleBehaviour : MonoBehaviour {
     public GameObject drill;
     private Object myDrill;
     private Object myBat;
+    public int impactToKill=100000;
 
   // Use this for initialization
     void Start () {
@@ -29,6 +30,19 @@ public class CircleBehaviour : MonoBehaviour {
 
     private bool GetButton(string buttonName) {
         return Input.GetButton("P" + playerNum + " " + buttonName);
+    }
+
+    void OnCollisionEnter2D(Collision2D coll) {
+        if (coll.collider.sharedMaterial.name.Equals("Asteroid")){
+            if (Mathf.Pow(coll.collider.GetComponent<Rigidbody2D>().velocity.magnitude, 2) * coll.gameObject.GetComponent<Rigidbody2D>().mass > impactToKill) {
+              Die();
+            }
+        }
+
+    }
+
+    void Die() {
+        Destroy(gameObject);
     }
 
     // Update is called once per frame
@@ -89,7 +103,7 @@ public class CircleBehaviour : MonoBehaviour {
         }
         if (playerNum == 1 && prevMouse != Input.mousePosition) {
             Vector3 mousePosReal = Input.mousePosition;
-            mousePosReal.z = 100;
+            mousePosReal.z = 147;
             Vector3 mousePos = Camera.main.ScreenToWorldPoint(mousePosReal);
             rb.transform.rotation = Quaternion.LookRotation(Vector3.forward, mousePos - transform.position);
         }
