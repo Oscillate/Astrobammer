@@ -45,7 +45,7 @@ public class Asteroid : MonoBehaviour {
 	}
 
 	void Batted(GameObject batter){
-		this.GetComponent<Rigidbody2D> ().AddForce ( 8000 * batter.transform.up);
+		this.GetComponent<Rigidbody2D> ().AddForce ( 6000 * batter.transform.up);
 	}
 
 	void Breaked(GameObject breaker){
@@ -59,7 +59,7 @@ public class Asteroid : MonoBehaviour {
 				Vector3 newpos = new Vector3(this.transform.position.x + Mathf.Cos(i * angle) * distance, this.transform.position.y + Mathf.Sin(i * angle) * distance, 0);
 				GameObject newthing = Instantiate(this.gameObject, newpos, Quaternion.AngleAxis (angle * (i) / Mathf.PI * 180 - 90, this.transform.forward)) as GameObject;
 				newthing.GetComponent<Rigidbody2D>().velocity = Quaternion.AngleAxis(angle * (i) / Mathf.PI * 180 - 90, Vector3.forward) * rb.velocity;
-				newthing.GetComponent<Rigidbody2D>().mass = this.rb.mass/numChildsSpawnedOnBreak;
+				newthing.GetComponent<Rigidbody2D>().mass = this.rb.mass/(1+numChildsSpawnedOnBreak);
 
 			}
 		}
