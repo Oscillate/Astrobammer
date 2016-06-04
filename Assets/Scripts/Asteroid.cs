@@ -19,6 +19,20 @@ public class Asteroid : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
+		Vector3 renderpos = Camera.main.WorldToViewportPoint (transform.position);
+		if (renderpos.x > 1) {
+			renderpos.x = 0;
+		}
+		else if (renderpos.x < 0) {
+			renderpos.x = 1;
+		}
+		if (renderpos.y > 1) {
+			renderpos.y = 0;
+		}
+		else if (renderpos.y < 0) {
+			renderpos.y = 1;
+		}
+		transform.position = Camera.main.ViewportToWorldPoint (renderpos);
 	}
 
 	void OnTriggerEnter2D(Collider2D c){
