@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using InControl;
 
 public class CircleBehaviour : MonoBehaviour {
 
@@ -8,7 +9,7 @@ public class CircleBehaviour : MonoBehaviour {
     public float speed = 150;
     public float maxSpeed = 150;
     public float brakeStrength = 5;
-    public int playerNum = 1;
+    public int playerNum = 0;
     public int batCoolDown = 15;
     public int drillCoolDown = 15;
     private int batTimer = 0;
@@ -21,18 +22,13 @@ public class CircleBehaviour : MonoBehaviour {
     private Quaternion rotation;
     public int bombInventory = 30;
     private bool isWrap = false;
+    private InputDevice inputDevice;
 
     void Start () {
         rb = this.GetComponent<Rigidbody2D>();
         GameManager.players.Add(this.gameObject);
-    }
 
-    private float GetAxis(string axisName) {
-        return Input.GetAxis("P" + playerNum + " " + axisName);
-    }
-
-    private bool GetButton(string buttonName) {
-        return Input.GetButton("P" + playerNum + " " + buttonName);
+        inputDevice = (InputManager.Devices.Count > playerNum) ? InputManager.Devices[playerNum] : null;
     }
 
     void OnCollisionEnter2D(Collision2D coll) {
@@ -49,8 +45,8 @@ public class CircleBehaviour : MonoBehaviour {
 
     // Update is called once per frame
     void Update () {
-        float xDir = GetAxis("Move Horizontal");
-        float yDir = GetAxis("Move Vertical");
+        float xDir = inputDevice.LeftStickX;
+        float yDir = inputDevice.LeftStickY;
 
         if (xDir < 0) {
             if (rb.velocity.x > -maxSpeed) {
@@ -79,33 +75,33 @@ public class CircleBehaviour : MonoBehaviour {
         if (drillTimer > 0) {
             drillTimer -= 1;
         }
-        if (GetAxis("Fire1") > 0 && batTimer == 0) {
+        if (inputDevice.RightTrigger && batTimer == 0) {
             myBat = Instantiate(bat, this.transform.position + this.transform.up * 5, rotation);
             ((GameObject)myBat).transform.SetParent(this.transform);
             batTimer = batCoolDown;
         }
 
-        if (GetButton("Fire2") && drillTimer == 0) {
+        if (inputDevice.RightBumper && drillTimer == 0) {
             myDrill = Instantiate(drill, this.transform.position + this.transform.up * 5, rotation);
             ((GameObject)myDrill).transform.SetParent(this.transform);
             drillTimer = drillCoolDown;
         }
 
-        if (GetAxis("Fire3") > 0) {
+        if (inputDevice.LeftTrigger) {
             rb.AddForce (Vector2.up * -rb.velocity.y * brakeStrength);
             rb.AddForce (Vector2.right * -rb.velocity.x * brakeStrength);
         }
 
         // TODO get a fire button
-        if (GetButton("Fire4") && bombInventory > 0) {
+        if (inputDevice.LeftBumper && bombInventory > 0) {
             Instantiate(explosive, this.transform.position + this.transform.up * 10, rb.transform.rotation);
             bombInventory--;
         }
 
-        float joyX = GetAxis("Look Horizontal");
-        float joyY = GetAxis("Look Vertical");
+        float joyX = inputDevice.RightStickX;
+        float joyY = inputDevice.RightStickY;
         if (joyX != 0 || joyY != 0) {
-            float joyAngle = Mathf.Atan2(joyY, joyX) * -1 * 180 / Mathf.PI - 90;
+            float joyAngle = Mathf.Atan2(joyY, joyX) * 180 / Mathf.PI - 90;
             rotation = Quaternion.AngleAxis(joyAngle, Vector3.forward);
         }
         if (playerNum == 1 && prevMouse != Input.mousePosition) {
