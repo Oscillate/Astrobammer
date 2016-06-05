@@ -8,8 +8,8 @@ public class BatHitBoxBehavior : MonoBehaviour {
         activeFrames = 5;
     }
 
-    void OnTriggerEnter2D(Collider2D c){
-        if (c.sharedMaterial.name.Equals("Asteroid")){
+    void OnTriggerEnter2D(Collider2D c) {
+        if (c.sharedMaterial.name.Equals("Asteroid")) {
             Destroy(gameObject);
         }
     }

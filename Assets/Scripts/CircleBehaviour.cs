@@ -15,12 +15,11 @@ public class CircleBehaviour : MonoBehaviour {
     private int drillTimer = 0;
     public GameObject bat;
     public GameObject drill;
-		public GameObject explosive;
+    public GameObject explosive;
     private Object myDrill;
     private Object myBat;
     private Quaternion rotation;
-    public int impactToKill = 100000;
-		public int bombInventory = 30;
+    public int bombInventory = 30;
 
     void Start () {
         rb = this.GetComponent<Rigidbody2D>();
@@ -36,8 +35,8 @@ public class CircleBehaviour : MonoBehaviour {
     }
 
     void OnCollisionEnter2D(Collision2D coll) {
-        if (coll.collider.sharedMaterial.name.Equals("Asteroid")){
-            if (Mathf.Pow(coll.collider.GetComponent<Rigidbody2D>().velocity.magnitude, 2) * coll.gameObject.GetComponent<Rigidbody2D>().mass > impactToKill) {
+        if (coll.collider.sharedMaterial.name.Equals("Asteroid")) {
+            if (coll.collider.GetComponent<Asteroid>().isLethal) {
               Die();
             }
         }
@@ -80,13 +79,13 @@ public class CircleBehaviour : MonoBehaviour {
             drillTimer -= 1;
         }
         if (GetAxis("Fire1") > 0 && batTimer == 0) {
-            myBat = Instantiate(bat, this.transform.position + this.transform.up * 10, rotation);
+            myBat = Instantiate(bat, this.transform.position + this.transform.up * 5, rotation);
             ((GameObject)myBat).transform.SetParent(this.transform);
             batTimer = batCoolDown;
         }
 
         if (GetButton("Fire2") && drillTimer == 0) {
-            myDrill = Instantiate(drill, this.transform.position + this.transform.up * 10, rotation);
+            myDrill = Instantiate(drill, this.transform.position + this.transform.up * 5, rotation);
             ((GameObject)myDrill).transform.SetParent(this.transform);
             drillTimer = drillCoolDown;
         }
@@ -96,12 +95,11 @@ public class CircleBehaviour : MonoBehaviour {
             rb.AddForce (Vector2.right * -rb.velocity.x * brakeStrength);
         }
 
-				// TODO get a fire button
-				if (Input.GetKeyDown("x") && bombInventory > 0) {
-						Instantiate(explosive, this.transform.position + this.transform.up * 10, rb.transform.rotation);
-						bombInventory--;
-
-				}
+        // TODO get a fire button
+        if (Input.GetKeyDown("x") && bombInventory > 0) {
+            Instantiate(explosive, this.transform.position + this.transform.up * 10, rb.transform.rotation);
+            bombInventory--;
+        }
 
         float joyX = GetAxis("Look Horizontal");
         float joyY = GetAxis("Look Vertical");

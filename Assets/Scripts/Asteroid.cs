@@ -7,12 +7,13 @@ public class Asteroid : MonoBehaviour {
 	public Size size;
 	public int numChildsSpawnedOnBreak;
 	private Rigidbody2D rb;
-	private int onSpawnInvinsibilityFrames;
+    public bool isLethal = false;
+	private int onSpawnInvincibilityFrames;
 	// Use this for initialization
 	void Start () {
 		AsteroidManager.Asteroids.Add (this);
 		rb = this.GetComponent<Rigidbody2D>();
-		onSpawnInvinsibilityFrames = 6;
+		onSpawnInvincibilityFrames = 6;
 	}
 
 	void OnDestroy(){
@@ -21,30 +22,35 @@ public class Asteroid : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
-		if (onSpawnInvinsibilityFrames > 0) {
-			onSpawnInvinsibilityFrames--;
-		}
-		Vector3 renderpos = Camera.main.WorldToViewportPoint (transform.position);
-		if (renderpos.x > 1) {
-			renderpos.x = 0;
-		}
-		else if (renderpos.x < 0) {
-			renderpos.x = 1;
-		}
-		if (renderpos.y > 1) {
-			renderpos.y = 0;
-		}
-		else if (renderpos.y < 0) {
-			renderpos.y = 1;
-		}
-		transform.position = Camera.main.ViewportToWorldPoint (renderpos);
+        isLethal = GetComponent<Rigidbody2D>().velocity.magnitude > 150;
+
+        if (isLethal) {
+            this.GetComponent<SpriteRenderer>().color = new Color(1, 0, 0, 1);
+        } else {
+            this.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 1);
+        }
+        if (onSpawnInvincibilityFrames > 0) {
+            onSpawnInvincibilityFrames--;
+        }
+        Vector3 renderpos = Camera.main.WorldToViewportPoint (transform.position);
+            if (renderpos.x > 1) {
+            renderpos.x = 0;
+        } else if (renderpos.x < 0) {
+            renderpos.x = 1;
+        }
+        if (renderpos.y > 1) {
+            renderpos.y = 0;
+        } else if (renderpos.y < 0) {
+            renderpos.y = 1;
+        }
+        transform.position = Camera.main.ViewportToWorldPoint (renderpos);
 	}
 
-	void OnTriggerEnter2D(Collider2D c){
+	void OnTriggerEnter2D(Collider2D c) {
 		if 	(c.sharedMaterial.name.Equals("BatHitBox")){
 				Batted(c.gameObject);
 		}
-		if (onSpawnInvinsibilityFrames <= 0) {
+		if (onSpawnInvincibilityFrames <= 0) {
 			if 	(c.sharedMaterial.name.Equals("DrillHitBox")){
 					Breaked(c.gameObject);
 			}
@@ -54,7 +60,7 @@ public class Asteroid : MonoBehaviour {
 		}
 	}
 
-	void Batted(GameObject batter){
+	void Batted(GameObject batter) {
 		this.GetComponent<Rigidbody2D> ().AddForce ( 6000 * batter.transform.up);
 	}
 
@@ -69,11 +75,11 @@ public class Asteroid : MonoBehaviour {
 				Vector3 newpos = new Vector3(this.transform.position.x + Mathf.Cos(i * angle) * distance, this.transform.position.y + Mathf.Sin(i * angle) * distance, 0);
 				GameObject newthing = Instantiate(this.gameObject, newpos, Quaternion.AngleAxis (angle * (i) / Mathf.PI * 180 - 90, this.transform.forward)) as GameObject;
 				newthing.GetComponent<Rigidbody2D>().velocity = Quaternion.AngleAxis(angle * (i) / Mathf.PI * 180 - 90, Vector3.forward) * rb.velocity;
-				newthing.GetComponent<Rigidbody2D>().mass = this.rb.mass/(1+numChildsSpawnedOnBreak);
+				newthing.GetComponent<Rigidbody2D>().mass = this.rb.mass / (numChildsSpawnedOnBreak + 1);
 
 			}
 		}
-		Destroy (gameObject);
+		Destroy(gameObject);
 	}
 
 	void Exploded(GameObject exploder) {
@@ -87,10 +93,10 @@ public class Asteroid : MonoBehaviour {
 				Vector3 newpos = new Vector3(this.transform.position.x + Mathf.Cos(i * angle) * distance, this.transform.position.y + Mathf.Sin(i * angle) * distance, 0);
 				GameObject newthing = Instantiate(this.gameObject, newpos, Quaternion.AngleAxis (angle * (i) / Mathf.PI * 180 - 90, this.transform.forward)) as GameObject;
 				newthing.GetComponent<Rigidbody2D>().AddForce (Quaternion.AngleAxis (angle * (i) / Mathf.PI * 180 - 90, this.transform.forward)*(this.transform.position - exploder.transform.position)*80);
-				newthing.GetComponent<Rigidbody2D>().mass = this.rb.mass/(1+numChildsSpawnedOnBreak);
+				newthing.GetComponent<Rigidbody2D>().mass = this.rb.mass / (1 + numChildsSpawnedOnBreak);
 
 			}
 		}
-		Destroy (gameObject);
+		Destroy(gameObject);
 	}
 }
