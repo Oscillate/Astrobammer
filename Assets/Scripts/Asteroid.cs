@@ -63,7 +63,7 @@ public class Asteroid : MonoBehaviour {
     }
 
     void Batted(GameObject batter) {
-        this.GetComponent<Rigidbody2D> ().AddForce ( 6000 * batter.transform.up);
+        this.GetComponent<Rigidbody2D> ().AddForce ( 3000 * batter.transform.up);
     }
 
     void Breaked(GameObject breaker){

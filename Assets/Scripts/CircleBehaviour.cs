@@ -5,8 +5,8 @@ public class CircleBehaviour : MonoBehaviour {
 
     private Rigidbody2D rb;
     private Vector3 prevMouse;
-    public float speed = 150;
-    public float maxSpeed = 150;
+    public float speed = 80;
+    public float maxSpeed = 50;
     public float brakeStrength = 5;
     public int playerNum = 1;
     public int batCoolDown = 15;
@@ -51,6 +51,7 @@ public class CircleBehaviour : MonoBehaviour {
     void Update () {
         float xDir = GetAxis("Move Horizontal");
         float yDir = GetAxis("Move Vertical");
+				//rb.velocity = Vector2.right * xDir * speed + Vector2.up * yDir * speed;
 
         if (xDir < 0) {
             if (rb.velocity.x > -maxSpeed) {
