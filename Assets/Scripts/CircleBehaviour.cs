@@ -20,11 +20,11 @@ public class CircleBehaviour : MonoBehaviour {
     private Object myBat;
     private Quaternion rotation;
     public int bombInventory = 30;
-	private bool isWrap = false;
+    private bool isWrap = false;
 
     void Start () {
         rb = this.GetComponent<Rigidbody2D>();
-		GameManager.players.Add(this.gameObject);
+        GameManager.players.Add(this.gameObject);
     }
 
     private float GetAxis(string axisName) {
@@ -118,22 +118,22 @@ public class CircleBehaviour : MonoBehaviour {
 
         prevMouse = Input.mousePosition;
 
-		if (!isWrap && !GetComponent<SpriteRenderer> ().isVisible) {
-			Vector3 renderpos = Camera.main.WorldToViewportPoint (transform.position);
-			if (renderpos.x > 1 || renderpos.x < 0) {
-				transform.position = new Vector3(-transform.position.x,transform.position.y,transform.position.z);
-			}
-			if (renderpos.y > 1 || renderpos.y < 0) {
-				transform.position = new Vector3(transform.position.x,-transform.position.y,transform.position.z);
-			}
-			isWrap = true;
-			//transform.position = Camera.main.ViewportToWorldPoint (renderpos);
-		} else if (GetComponent<SpriteRenderer> ().isVisible) {
-			isWrap = false;
-		}
+        if (!isWrap && !GetComponent<SpriteRenderer> ().isVisible) {
+            Vector3 renderpos = Camera.main.WorldToViewportPoint (transform.position);
+            if (renderpos.x > 1 || renderpos.x < 0) {
+                transform.position = new Vector3(-transform.position.x,transform.position.y,transform.position.z);
+            }
+            if (renderpos.y > 1 || renderpos.y < 0) {
+                transform.position = new Vector3(transform.position.x,-transform.position.y,transform.position.z);
+            }
+            isWrap = true;
+            //transform.position = Camera.main.ViewportToWorldPoint (renderpos);
+        } else if (GetComponent<SpriteRenderer> ().isVisible) {
+            isWrap = false;
+        }
     }
 
-	void OnDestroy(){
-		GameManager.players.Remove (this.gameObject);
-	}
+    void OnDestroy(){
+        GameManager.players.Remove (this.gameObject);
+    }
 }
