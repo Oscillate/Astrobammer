@@ -6,7 +6,7 @@ public class CircleBehaviour : MonoBehaviour {
 
     private Rigidbody2D rb;
     private Vector3 prevMouse;
-    public float speed = 80;
+    public float speed = 10;
     public float maxSpeed = 50;
     public float brakeStrength = 5;
     public int playerNum = 0;
@@ -54,7 +54,7 @@ public class CircleBehaviour : MonoBehaviour {
     void Update () {
         float xDir = inputDevice.LeftStickX;
         float yDir = inputDevice.LeftStickY;
-
+        
         if (xDir < 0) {
             if (rb.velocity.x > -maxSpeed) {
                 rb.AddForce(Vector2.right * xDir * speed);
@@ -75,7 +75,7 @@ public class CircleBehaviour : MonoBehaviour {
                 rb.AddForce(Vector2.up * yDir * speed);
             }
         }
-
+        
         if (batTimer > 0) {
             batTimer -= 1;
         }
@@ -134,7 +134,6 @@ public class CircleBehaviour : MonoBehaviour {
                 transform.position = new Vector3(transform.position.x,-transform.position.y,transform.position.z);
             }
             isWrap = true;
-            //transform.position = Camera.main.ViewportToWorldPoint (renderpos);
         } else if (GetComponent<SpriteRenderer> ().isVisible) {
             isWrap = false;
         }
