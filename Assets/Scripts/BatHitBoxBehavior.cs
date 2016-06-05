@@ -5,13 +5,10 @@ public class BatHitBoxBehavior : MonoBehaviour {
     public int activeFrames;
     // Use this for initialization
     void Start () {
-        activeFrames = 5;
+        activeFrames = 10;
     }
 
     void OnTriggerEnter2D(Collider2D c) {
-        if (c.sharedMaterial.name.Equals("Asteroid")) {
-            Destroy(gameObject);
-        }
     }
 
     // Update is called once per frame

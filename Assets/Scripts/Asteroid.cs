@@ -6,10 +6,14 @@ public class Asteroid : MonoBehaviour {
     public enum Size {small, medium, large};
     public Size size;
     public int numChildsSpawnedOnBreak;
+
+    public GameObject particle;
+
     private Rigidbody2D rb;
     public bool isLethal = false;
     private int onSpawnInvincibilityFrames;
     private bool isWrap = false;
+
     // Use this for initialization
     void Start () {
         AsteroidManager.Asteroids.Add (this);
@@ -49,12 +53,12 @@ public class Asteroid : MonoBehaviour {
     }
 
     void OnTriggerEnter2D(Collider2D c) {
-        if     (c.sharedMaterial.name.Equals("BatHitBox")){
-                Batted(c.gameObject);
+        if (c.sharedMaterial.name.Equals("BatHitBox")){
+            Batted(c.gameObject);
         }
         if (onSpawnInvincibilityFrames <= 0) {
-            if     (c.sharedMaterial.name.Equals("DrillHitBox")){
-                    Breaked(c.gameObject);
+            if (c.sharedMaterial.name.Equals("DrillHitBox")){
+                Breaked(c.gameObject);
             }
             if (c.sharedMaterial.name.Equals("Explosion")) {
                 Exploded(c.gameObject);
@@ -63,7 +67,7 @@ public class Asteroid : MonoBehaviour {
     }
 
     void Batted(GameObject batter) {
-        this.GetComponent<Rigidbody2D> ().AddForce ( 6000 * batter.transform.up);
+        this.GetComponent<Rigidbody2D> ().AddForce ( 5000 * batter.transform.up);
     }
 
     void Breaked(GameObject breaker){
@@ -80,7 +84,9 @@ public class Asteroid : MonoBehaviour {
                 newthing.GetComponent<Rigidbody2D>().mass = this.rb.mass / (numChildsSpawnedOnBreak + 1);
 
             }
+
         }
+        GenerateParticles ();
         Destroy(gameObject);
     }
 
@@ -98,7 +104,22 @@ public class Asteroid : MonoBehaviour {
                 newthing.GetComponent<Rigidbody2D>().mass = this.rb.mass / (1 + numChildsSpawnedOnBreak);
 
             }
+
         }
+        GenerateParticles ();
         Destroy(gameObject);
+    }
+    void GenerateParticles(){
+        int particlesGeneratedOnBreak = 50;
+        for (int i = 0; i < particlesGeneratedOnBreak; i++) {
+            float offsetMax = 10;
+            float speedMax = 100;
+            float speedMin = 40;
+            Vector3 offset = new Vector3 (Random.Range (0, offsetMax), Random.Range (0, offsetMax), 0);
+            GameObject newParticle = Instantiate (particle, this.transform.position, Quaternion.AngleAxis(Random.Range(0,360),Vector3.forward)) as GameObject;
+            Rigidbody2D newParticleRigidBody = newParticle.GetComponent<Rigidbody2D> ();
+            newParticleRigidBody.velocity =  newParticle.transform.up * Random.Range(speedMin,speedMax) * ((int)size + 1);
+            newParticle.transform.localScale *= Random.Range (1, ((int)size + 1) * 3);
+        }
     }
 }

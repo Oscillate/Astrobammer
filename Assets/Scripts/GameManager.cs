@@ -24,8 +24,12 @@ public class GameManager : MonoBehaviour {
 
     // Update is called once per frame
     void Update() {
-        if (gameStarted && players.Count == 1) {
-            GameOver(players[0]);
+        if (gameStarted && players.Count <= 1) {
+            if (players.Count == 0) {
+                GameOver("Nobody");
+            } else {
+                GameOver(players[0].name);
+            }
         }
 
         bool restart = false;
@@ -46,13 +50,13 @@ public class GameManager : MonoBehaviour {
         gameStarted = true;
     }
 
-    void GameOver(GameObject winner){
+    void GameOver(string winner){
         UI.gameObject.SetActive(true);
         gameStarted = false;
         playButton.onClick.RemoveAllListeners ();
         playButton.onClick.AddListener (() => {
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         });
-        status.text = winner.name + " wins!";
+        status.text = winner + " wins!";
     }
 }

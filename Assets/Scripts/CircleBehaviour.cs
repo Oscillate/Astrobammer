@@ -6,8 +6,8 @@ public class CircleBehaviour : MonoBehaviour {
 
     private Rigidbody2D rb;
     private Vector3 prevMouse;
-    public float speed = 150;
-    public float maxSpeed = 150;
+    public float speed = 80;
+    public float maxSpeed = 50;
     public float brakeStrength = 5;
     public int playerNum = 0;
     public int batCoolDown = 15;
@@ -20,9 +20,10 @@ public class CircleBehaviour : MonoBehaviour {
     private Object myDrill;
     private Object myBat;
     private Quaternion rotation;
-    public int bombInventory = 30;
+    public int bombInventory = 2;
     private bool isWrap = false;
     private InputDevice inputDevice;
+    private bool threwBomb = false;
 
     void Start () {
         rb = this.GetComponent<Rigidbody2D>();
@@ -36,6 +37,12 @@ public class CircleBehaviour : MonoBehaviour {
             if (coll.collider.GetComponent<Asteroid>().isLethal) {
               Die();
             }
+        }
+    }
+
+    void OnTriggerEnter2D(Collider2D coll) {
+        if (coll.sharedMaterial.name.Equals("Explosion")) {
+            Die();
         }
     }
 
@@ -76,13 +83,13 @@ public class CircleBehaviour : MonoBehaviour {
             drillTimer -= 1;
         }
         if (inputDevice.RightTrigger && batTimer == 0) {
-            myBat = Instantiate(bat, this.transform.position + this.transform.up * 5, rotation);
+            myBat = Instantiate(bat, this.transform.position + this.transform.up * 8, rotation);
             ((GameObject)myBat).transform.SetParent(this.transform);
             batTimer = batCoolDown;
         }
 
         if (inputDevice.RightBumper && drillTimer == 0) {
-            myDrill = Instantiate(drill, this.transform.position + this.transform.up * 5, rotation);
+            myDrill = Instantiate(drill, this.transform.position + this.transform.up * 8, rotation);
             ((GameObject)myDrill).transform.SetParent(this.transform);
             drillTimer = drillCoolDown;
         }
@@ -92,10 +99,14 @@ public class CircleBehaviour : MonoBehaviour {
             rb.AddForce (Vector2.right * -rb.velocity.x * brakeStrength);
         }
 
-        // TODO get a fire button
-        if (inputDevice.LeftBumper && bombInventory > 0) {
-            Instantiate(explosive, this.transform.position + this.transform.up * 10, rb.transform.rotation);
-            bombInventory--;
+        if (inputDevice.LeftBumper) {
+            if (!threwBomb && bombInventory > 0) {
+                Instantiate(explosive, this.transform.position + this.transform.up * 10, rb.transform.rotation);
+                bombInventory--;
+                threwBomb = true;
+            }
+        } else {
+            threwBomb = false;
         }
 
         float joyX = inputDevice.RightStickX;
