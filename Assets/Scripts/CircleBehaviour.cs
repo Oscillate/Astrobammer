@@ -15,12 +15,15 @@ public class CircleBehaviour : MonoBehaviour {
     private int drillTimer = 0;
     public GameObject bat;
     public GameObject drill;
+    public GameObject explosive;
     private Object myDrill;
     private Object myBat;
     private Quaternion rotation;
+    public int bombInventory = 30;
 
     void Start () {
         rb = this.GetComponent<Rigidbody2D>();
+		GameManager.players.Add (this.gameObject);
     }
 
     private float GetAxis(string axisName) {
@@ -32,12 +35,11 @@ public class CircleBehaviour : MonoBehaviour {
     }
 
     void OnCollisionEnter2D(Collision2D coll) {
-        if (coll.collider.sharedMaterial.name.Equals("Asteroid")){
+        if (coll.collider.sharedMaterial.name.Equals("Asteroid")) {
             if (coll.collider.GetComponent<Asteroid>().isLethal) {
               Die();
             }
         }
-
     }
 
     void Die() {
@@ -93,6 +95,12 @@ public class CircleBehaviour : MonoBehaviour {
             rb.AddForce (Vector2.right * -rb.velocity.x * brakeStrength);
         }
 
+        // TODO get a fire button
+        if (Input.GetKeyDown("x") && bombInventory > 0) {
+            Instantiate(explosive, this.transform.position + this.transform.up * 10, rb.transform.rotation);
+            bombInventory--;
+        }
+
         float joyX = GetAxis("Look Horizontal");
         float joyY = GetAxis("Look Vertical");
         if (joyX != 0 || joyY != 0) {
@@ -109,4 +117,8 @@ public class CircleBehaviour : MonoBehaviour {
 
         prevMouse = Input.mousePosition;
     }
+
+	void OnDestroy(){
+		GameManager.players.Remove (this.gameObject);
+	}
 }
