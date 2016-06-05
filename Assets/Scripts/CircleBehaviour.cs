@@ -15,10 +15,12 @@ public class CircleBehaviour : MonoBehaviour {
     private int drillTimer = 0;
     public GameObject bat;
     public GameObject drill;
+		public GameObject explosive;
     private Object myDrill;
     private Object myBat;
     private Quaternion rotation;
-    public int impactToKill=100000;
+    public int impactToKill = 100000;
+		public int bombInventory = 30;
 
     void Start () {
         rb = this.GetComponent<Rigidbody2D>();
@@ -38,7 +40,6 @@ public class CircleBehaviour : MonoBehaviour {
               Die();
             }
         }
-
     }
 
     void Die() {
@@ -93,6 +94,13 @@ public class CircleBehaviour : MonoBehaviour {
             rb.AddForce (Vector2.up * -rb.velocity.y * brakeStrength);
             rb.AddForce (Vector2.right * -rb.velocity.x * brakeStrength);
         }
+
+				// TODO get a fire button
+				if (Input.GetKeyDown("x") && bombInventory > 0) {
+						Instantiate(explosive, this.transform.position + this.transform.up * 10, rb.transform.rotation);
+						bombInventory--;
+
+				}
 
         float joyX = GetAxis("Look Horizontal");
         float joyY = GetAxis("Look Vertical");
