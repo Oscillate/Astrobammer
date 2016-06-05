@@ -6,7 +6,7 @@ public class Wall : MonoBehaviour {
 	public float multiplier;
 	// Use this for initialization
 	void Start () {
-	
+        GetComponent<SpriteRenderer>().enabled = false;
 	}
 	
 	// Update is called once per frame

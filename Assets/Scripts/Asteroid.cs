@@ -7,9 +7,10 @@ public class Asteroid : MonoBehaviour {
 	public Size size;
 	public int numChildsSpawnedOnBreak;
 	private Rigidbody2D rb;
+    public bool isLethal = false;
+
 	// Use this for initialization
 	void Start () {
-		//Debug.Log (AsteroidManager.Asteroids);
 		AsteroidManager.Asteroids.Add (this);
 		rb = this.GetComponent<Rigidbody2D>();
 	}
@@ -20,7 +21,14 @@ public class Asteroid : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
-	}
+        isLethal = GetComponent<Rigidbody2D>().velocity.magnitude > 150;
+
+        if (isLethal) {
+            this.GetComponent<SpriteRenderer>().color = new Color(1, 0, 0, 1);
+        } else {
+            this.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 1);
+        }
+    }
 
 	void OnTriggerEnter2D(Collider2D c){
 		if 	(c.sharedMaterial.name.Equals("BatHitBox")){
@@ -32,7 +40,7 @@ public class Asteroid : MonoBehaviour {
 	}
 
 	void Batted(GameObject batter){
-		this.GetComponent<Rigidbody2D> ().AddForce ( 8000 * batter.transform.up);
+		this.GetComponent<Rigidbody2D> ().AddForce ( 6000 * batter.transform.up);
 	}
 
 	void Breaked(GameObject breaker){
@@ -46,7 +54,7 @@ public class Asteroid : MonoBehaviour {
 				Vector3 newpos = new Vector3(this.transform.position.x + Mathf.Cos(i * angle) * distance, this.transform.position.y + Mathf.Sin(i * angle) * distance, 0);
 				GameObject newthing = Instantiate(this.gameObject, newpos, Quaternion.AngleAxis (angle * (i) / Mathf.PI * 180 - 90, this.transform.forward)) as GameObject;
 				newthing.GetComponent<Rigidbody2D>().velocity = Quaternion.AngleAxis(angle * (i) / Mathf.PI * 180 - 90, Vector3.forward) * rb.velocity;
-				newthing.GetComponent<Rigidbody2D>().mass = this.rb.mass/numChildsSpawnedOnBreak;
+				newthing.GetComponent<Rigidbody2D>().mass = this.rb.mass / (numChildsSpawnedOnBreak + 1);
 
 			}
 		}
