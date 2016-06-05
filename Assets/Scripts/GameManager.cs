@@ -14,7 +14,7 @@ public class GameManager : MonoBehaviour {
 	// Use this for initialization
 
 	void Awake(){
-		players = new List<GameObject> ();
+		players = new List<GameObject>();
 	}
 
 	void Start () {
@@ -24,10 +24,10 @@ public class GameManager : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		if (gameStarted && players.Count == 1) {
-			GameOver (players [0]);
+			GameOver (players[0]);
 		} 
-		if (Input.GetButtonDown("Restart")){
-			SceneManager.LoadScene (SceneManager.GetActiveScene ().name);
+		if (Input.GetButtonDown("Restart")) {
+			SceneManager.LoadScene(SceneManager.GetActiveScene().name);
 		}
 	}
 

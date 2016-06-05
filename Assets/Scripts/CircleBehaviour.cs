@@ -23,7 +23,7 @@ public class CircleBehaviour : MonoBehaviour {
 
     void Start () {
         rb = this.GetComponent<Rigidbody2D>();
-		GameManager.players.Add (this.gameObject);
+		GameManager.players.Add(this.gameObject);
     }
 
     private float GetAxis(string axisName) {
@@ -96,7 +96,7 @@ public class CircleBehaviour : MonoBehaviour {
         }
 
         // TODO get a fire button
-        if (Input.GetKeyDown("x") && bombInventory > 0) {
+        if (GetButton("Fire4") && bombInventory > 0) {
             Instantiate(explosive, this.transform.position + this.transform.up * 10, rb.transform.rotation);
             bombInventory--;
         }
