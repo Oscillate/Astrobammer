@@ -22,6 +22,7 @@ public class CircleBehaviour : MonoBehaviour {
 
     void Start () {
         rb = this.GetComponent<Rigidbody2D>();
+		GameManager.players.Add (this.gameObject);
     }
 
     private float GetAxis(string axisName) {
@@ -110,4 +111,8 @@ public class CircleBehaviour : MonoBehaviour {
 
         prevMouse = Input.mousePosition;
     }
+
+	void OnDestroy(){
+		GameManager.players.Remove (this.gameObject);
+	}
 }
