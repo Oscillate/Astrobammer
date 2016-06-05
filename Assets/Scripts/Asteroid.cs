@@ -7,7 +7,7 @@ public class Asteroid : MonoBehaviour {
     public Size size;
     public int numChildsSpawnedOnBreak;
 
-    public GameObject particle; 
+    public GameObject particle;
 
     private Rigidbody2D rb;
     public bool isLethal = false;
@@ -67,7 +67,7 @@ public class Asteroid : MonoBehaviour {
     }
 
     void Batted(GameObject batter) {
-        this.GetComponent<Rigidbody2D> ().AddForce ( 6000 * batter.transform.up);
+        this.GetComponent<Rigidbody2D> ().AddForce ( 5000 * batter.transform.up);
     }
 
     void Breaked(GameObject breaker){
