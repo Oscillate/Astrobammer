@@ -5,7 +5,7 @@ public class BatHitBoxBehavior : MonoBehaviour {
     public int activeFrames;
     // Use this for initialization
     void Start () {
-        activeFrames = 5;
+        activeFrames = 10;
     }
 
     void OnTriggerEnter2D(Collider2D c) {

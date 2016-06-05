@@ -53,12 +53,12 @@ public class Asteroid : MonoBehaviour {
     }
 
     void OnTriggerEnter2D(Collider2D c) {
-        if     (c.sharedMaterial.name.Equals("BatHitBox")){
-                Batted(c.gameObject);
+        if (c.sharedMaterial.name.Equals("BatHitBox")){
+            Batted(c.gameObject);
         }
         if (onSpawnInvincibilityFrames <= 0) {
-            if     (c.sharedMaterial.name.Equals("DrillHitBox")){
-                    Breaked(c.gameObject);
+            if (c.sharedMaterial.name.Equals("DrillHitBox")){
+                Breaked(c.gameObject);
             }
             if (c.sharedMaterial.name.Equals("Explosion")) {
                 Exploded(c.gameObject);

@@ -7,7 +7,9 @@ public class Particle : MonoBehaviour {
     SpriteRenderer renderer;
     // Use this for initialization
     void Start () {
-        renderer = GetComponent<SpriteRenderer> ();
+        renderer = GetComponent<SpriteRenderer>();
+        float brightness = Random.value * 0.5f + 0.5f;
+        renderer.color = new Color(brightness, brightness, brightness, 1);
     }
     
     // Update is called once per frame

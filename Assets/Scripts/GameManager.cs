@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using InControl;
 
 public class GameManager : MonoBehaviour {
     public Canvas UI;
@@ -20,13 +21,26 @@ public class GameManager : MonoBehaviour {
     void Start () {
         gameStarted = true;
     }
-    
+
     // Update is called once per frame
-    void Update () {
-        if (gameStarted && players.Count == 1) {
-            GameOver (players[0]);
-        } 
-        if (Input.GetButtonDown("Restart")) {
+    void Update() {
+        if (gameStarted && players.Count <= 1) {
+            if (players.Count == 0) {
+                GameOver("Nobody");
+            } else {
+                GameOver(players[0].name);
+            }
+        }
+
+        bool restart = false;
+        for (int i = 0; i < InputManager.Devices.Count; i++) {
+            if (InputManager.Devices[i].MenuWasPressed) {
+                restart = true;
+                break;
+            }
+        }
+
+        if (restart) {
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         }
     }
@@ -36,14 +50,13 @@ public class GameManager : MonoBehaviour {
         gameStarted = true;
     }
 
-    void GameOver(GameObject winner){
+    void GameOver(string winner){
         UI.gameObject.SetActive(true);
         gameStarted = false;
-        Debug.Log ("Game Over");
         playButton.onClick.RemoveAllListeners ();
         playButton.onClick.AddListener (() => {
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         });
-        status.text = winner.name + " wins!";
+        status.text = winner + " wins!";
     }
 }
