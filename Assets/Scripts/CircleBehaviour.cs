@@ -20,6 +20,7 @@ public class CircleBehaviour : MonoBehaviour {
     private Object myBat;
     private Quaternion rotation;
     public int bombInventory = 30;
+	private bool isWrap = false;
 
     void Start () {
         rb = this.GetComponent<Rigidbody2D>();
@@ -116,6 +117,20 @@ public class CircleBehaviour : MonoBehaviour {
         rb.transform.rotation = rotation;
 
         prevMouse = Input.mousePosition;
+
+		if (!isWrap && !GetComponent<SpriteRenderer> ().isVisible) {
+			Vector3 renderpos = Camera.main.WorldToViewportPoint (transform.position);
+			if (renderpos.x > 1 || renderpos.x < 0) {
+				transform.position = new Vector3(-transform.position.x,transform.position.y,transform.position.z);
+			}
+			if (renderpos.y > 1 || renderpos.y < 0) {
+				transform.position = new Vector3(transform.position.x,-transform.position.y,transform.position.z);
+			}
+			isWrap = true;
+			//transform.position = Camera.main.ViewportToWorldPoint (renderpos);
+		} else if (GetComponent<SpriteRenderer> ().isVisible) {
+			isWrap = false;
+		}
     }
 
 	void OnDestroy(){

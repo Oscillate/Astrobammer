@@ -9,6 +9,7 @@ public class Asteroid : MonoBehaviour {
 	private Rigidbody2D rb;
     public bool isLethal = false;
 	private int onSpawnInvincibilityFrames;
+	private bool isWrap = false;
 	// Use this for initialization
 	void Start () {
 		AsteroidManager.Asteroids.Add (this);
@@ -32,18 +33,19 @@ public class Asteroid : MonoBehaviour {
         if (onSpawnInvincibilityFrames > 0) {
             onSpawnInvincibilityFrames--;
         }
-        Vector3 renderpos = Camera.main.WorldToViewportPoint (transform.position);
-            if (renderpos.x > 1) {
-            renderpos.x = 0;
-        } else if (renderpos.x < 0) {
-            renderpos.x = 1;
-        }
-        if (renderpos.y > 1) {
-            renderpos.y = 0;
-        } else if (renderpos.y < 0) {
-            renderpos.y = 1;
-        }
-        transform.position = Camera.main.ViewportToWorldPoint (renderpos);
+		if (!isWrap && !GetComponent<SpriteRenderer> ().isVisible) {
+			Vector3 renderpos = Camera.main.WorldToViewportPoint (transform.position);
+			if (renderpos.x > 1 || renderpos.x < 0) {
+				transform.position = new Vector3(-transform.position.x,transform.position.y,transform.position.z);
+			}
+			if (renderpos.y > 1 || renderpos.y < 0) {
+				transform.position = new Vector3(transform.position.x,-transform.position.y,transform.position.z);
+			}
+			isWrap = true;
+			//transform.position = Camera.main.ViewportToWorldPoint (renderpos);
+		} else if (GetComponent<SpriteRenderer> ().isVisible) {
+			isWrap = false;
+		}
 	}
 
 	void OnTriggerEnter2D(Collider2D c) {

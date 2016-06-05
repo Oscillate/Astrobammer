@@ -18,7 +18,7 @@ public class GameManager : MonoBehaviour {
 	}
 
 	void Start () {
-		gameStarted = false;
+		gameStarted = true;
 	}
 	
 	// Update is called once per frame
@@ -37,7 +37,9 @@ public class GameManager : MonoBehaviour {
 	}
 
 	void GameOver(GameObject winner){
-		UI.enabled = true;
+		UI.gameObject.SetActive(true);
+		gameStarted = false;
+		Debug.Log ("Game Over");
 		playButton.onClick.RemoveAllListeners ();
 		playButton.onClick.AddListener (() => {
 			SceneManager.LoadScene(SceneManager.GetActiveScene().name);
