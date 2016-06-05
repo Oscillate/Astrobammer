@@ -5,13 +5,13 @@ public class Particle : MonoBehaviour {
     public int framesAlive;
     public float decayRate;
     SpriteRenderer renderer;
-	// Use this for initialization
-	void Start () {
+    // Use this for initialization
+    void Start () {
         renderer = GetComponent<SpriteRenderer> ();
-	}
-	
-	// Update is called once per frame
-	void Update () {
+    }
+    
+    // Update is called once per frame
+    void Update () {
         Color color = renderer.color;
         Vector3 scale = transform.localScale;
         scale *= decayRate;
@@ -22,5 +22,5 @@ public class Particle : MonoBehaviour {
         if (framesAlive < 0) {
             Destroy (gameObject);
         }
-	}
+    }
 }
