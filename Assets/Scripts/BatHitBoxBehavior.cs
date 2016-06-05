@@ -10,7 +10,7 @@ public class BatHitBoxBehavior : MonoBehaviour {
 
     void OnTriggerEnter2D(Collider2D c){
         if (c.sharedMaterial.name.Equals("Asteroid")){
-            //Destroy(gameObject);
+            Destroy(gameObject);
         }
     }
 
